@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | ObraSegura</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* --- ESTÉTICA GENERAL --- */
+        :root {
+            --primary: #0f172a;      /* Azul Oscuro (Elegante) */
+            --accent: #3b82f6;       /* Azul Brillante (Tech) */
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --bg: #f8fafc;           /* Fondo muy claro */
+            --white: #ffffff;
+            --text-main: #334155;
+            --text-light: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; }
+
+        /* --- SIDEBAR (NAVEGACIÓN LATERAL) --- */
+        .sidebar {
+            width: 280px; background: var(--primary); color: var(--white);
+            display: flex; flex-direction: column; padding: 25px;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.05); z-index: 10;
+        }
+        .brand { 
+            font-size: 1.5rem; font-weight: 800; margin-bottom: 50px; 
+            display: flex; align-items: center; gap: 10px; color: var(--white);
+        }
+        .brand i { color: var(--accent); }
+        
+        .menu-label { font-size: 0.75rem; text-transform: uppercase; color: var(--text-light); margin-bottom: 10px; letter-spacing: 1px; }
+        
+        .menu-item {
+            padding: 12px 15px; margin-bottom: 8px; border-radius: 10px; cursor: pointer;
+            color: #cbd5e1; transition: 0.3s; display: flex; align-items: center; gap: 12px; font-weight: 500;
+        }
+        .menu-item:hover { background: rgba(255,255,255,0.05); color: var(--white); transform: translateX(5px); }
+        .menu-item.active { background: var(--accent); color: var(--white); box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4); }
+        
+        .user-profile { 
+            margin-top: auto; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); 
+            display: flex; align-items: center; gap: 12px; 
+        }
+        .avatar { width: 40px; height: 40px; background: var(--accent); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; color: white; }
+
+        /* --- CONTENIDO PRINCIPAL --- */
+        .main { flex: 1; padding: 40px; overflow-y: auto; position: relative; }
+        
+        /* Header del Dashboard */
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+        .header h2 { font-size: 1.8rem; font-weight: 700; color: var(--primary); }
+        .header p { color: var(--text-light); margin-top: 5px; }
+        
+        .btn-back {
+            text-decoration: none; background: var(--white); border: 1px solid #e2e8f0; 
+            padding: 10px 20px; border-radius: 8px; font-weight: 600; color: var(--primary); 
+            transition: 0.3s; display: flex; align-items: center; gap: 8px;
+        }
+        .btn-back:hover { background: #f1f5f9; border-color: var(--accent); color: var(--accent); }
+
+        /* --- TARJETAS Y GRID --- */
+        .view-section { animation: fadeIn 0.5s ease-in-out; }
+        .hidden { display: none; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 25px; margin-bottom: 25px; }
+        
+        .card { 
+            background: var(--white); padding: 25px; border-radius: 16px; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid #f1f5f9;
+        }
+        .card h3 { font-size: 0.9rem; color: var(--text-light); text-transform: uppercase; margin-bottom: 15px; letter-spacing: 0.5px; }
+        .value { font-size: 2.2rem; font-weight: 700; color: var(--primary); }
+        .sub-text { font-size: 0.85rem; margin-top: 5px; display: block; }
+
+        /* --- TABLAS --- */
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th { text-align: left; padding: 15px; color: var(--text-light); border-bottom: 1px solid #e2e8f0; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; }
+        td { padding: 15px; border-bottom: 1px solid #e2e8f0; font-size: 0.95rem; }
+        .badge { padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+        .bg-red { background: #fee2e2; color: #991b1b; }
+        .bg-green { background: #dcfce7; color: #166534; }
+        .bg-blue { background: #dbeafe; color: #1e40af; }
+
+        /* --- ESTILOS DEL EQUIPO (SOBRE NOSOTROS) --- */
+        .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 20px; }
+        .team-card { 
+            background: var(--white); border-radius: 20px; padding: 40px 20px; text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: 0.3s; border-top: 5px solid var(--accent);
+        }
+        .team-card:hover { transform: translateY(-10px); box-shadow: 0 15px 40px rgba(0,0,0,0.1); }
+        
+        /* FOTO CIRCULAR */
+        .team-photo { 
+            width: 120px; height: 120px; border-radius: 50%; object-fit: cover; 
+            margin: 0 auto 20px; border: 4px solid #f1f5f9; padding: 2px; background: white;
+        }
+        
+        .role-badge { 
+            background: #eff6ff; color: var(--accent); padding: 5px 15px; border-radius: 20px; 
+            font-size: 0.8rem; font-weight: 700; display: inline-block; margin-bottom: 15px;
+        }
+        .student-name { font-size: 1.2rem; font-weight: 700; color: var(--primary); margin-bottom: 10px; }
+        .student-desc { font-size: 0.9rem; color: var(--text-light); line-height: 1.6; }
+
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="brand">
+            <i class="fas fa-layer-group"></i> ObraSegura
+        </div>
+        
+        <div class="menu-label">Gestión</div>
+        <div class="menu-item active" onclick="showModule('dashboard')">
+            <i class="fas fa-chart-pie"></i> Dashboard
+        </div>
+        <div class="menu-item" onclick="showModule('legal')">
+            <i class="fas fa-gavel"></i> Módulo Legal
+        </div>
+        <div class="menu-item" onclick="showModule('safety')">
+            <i class="fas fa-helmet-safety"></i> Seguridad (SSO)
+        </div>
+        <div class="menu-item" onclick="showModule('admin')">
+            <i class="fas fa-users"></i> Administración
+        </div>
+
+        <div class="menu-label" style="margin-top: 20px;">Proyecto</div>
+        <div class="menu-item" onclick="showModule('about')">
+            <i class="fas fa-user-graduate"></i> Sobre Nosotros
+        </div>
+
+        <div class="user-profile">
+            <div class="avatar">IR</div>
+            <div>
+                <div style="font-weight: 600; font-size: 0.9rem;">Ing. Residente</div>
+                <div style="font-size: 0.75rem; color: #94a3b8;">Admin. Proyecto</div>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main">
+        <div class="header">
+            <div>
+                <h2 id="pageTitle">Resumen Ejecutivo</h2>
+                <p>Proyecto Costanera - Tramo Tola (Km 10 - 15)</p>
+            </div>
+            <a href="index.html" class="btn-back">
+                <i class="fas fa-arrow-left"></i> Volver al Inicio
+            </a>
+        </div>
+
+        <div id="view-dashboard" class="view-section">
+            <div class="grid-4">
+                <div class="card">
+                    <h3>Cumplimiento Legal</h3>
+                    <div class="value" style="color: var(--danger);">20%</div>
+                    <span class="sub-text" style="color: var(--danger);"><i class="fas fa-exclamation-circle"></i> Crítico: Regularizar</span>
+                </div>
+                <div class="card">
+                    <h3>Asistencia en Campo</h3>
+                    <div class="value">48/50</div>
+                    <span class="sub-text" style="color: var(--success);"><i class="fas fa-check-circle"></i> 96% Operativo</span>
+                </div>
+                <div class="card">
+                    <h3>Incidentes (Mes)</h3>
+                    <div class="value" style="color: var(--warning);">3</div>
+                    <span class="sub-text">Falta de EPP detectada</span>
+                </div>
+                <div class="card">
+                    <h3>Licencias</h3>
+                    <div class="value" style="color: var(--danger);">VENCIDA</div>
+                    <span class="sub-text">MITRAB - Apertura</span>
+                </div>
+            </div>
+
+            <div class="grid-4" style="grid-template-columns: 2fr 1fr;">
+                <div class="card">
+                    <h3>Reporte Semanal de Seguridad</h3>
+                    <canvas id="mainChart"></canvas>
+                </div>
+                <div class="card">
+                    <h3>Contratos Físicos</h3>
+                    <canvas id="docChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-legal" class="view-section hidden">
+            <div class="card" style="border-left: 5px solid var(--danger); background: #fff5f5; margin-bottom: 25px;">
+                <h3 style="color: var(--danger); margin-bottom: 5px; border: none;">¡ALERTA DE CUMPLIMIENTO!</h3>
+                <p style="color: var(--primary);">La Licencia de Apertura ha caducado. El sistema ha bloqueado nuevas contrataciones hasta regularizar.</p>
+            </div>
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3 style="margin: 0; color: var(--primary);">Repositorio de Contratos</h3>
+                    <button style="background: var(--accent); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;">+ Nuevo Contrato</button>
+                </div>
+                <table>
+                    <thead><tr><th>Empleado</th><th>Cargo</th><th>Estado</th><th>Acción</th></tr></thead>
+                    <tbody>
+                        <tr><td>Juan Pérez</td><td>Ayudante</td><td><span class="badge bg-red">Verbal (Riesgo)</span></td><td><i class="fas fa-edit"></i> Regularizar</td></tr>
+                        <tr><td>Carlos Ruiz</td><td>Albañil</td><td><span class="badge bg-green">Firmado</span></td><td><i class="fas fa-file-pdf"></i> Ver PDF</td></tr>
+                        <tr><td>Luis Gómez</td><td>Operador</td><td><span class="badge bg-red">Verbal (Riesgo)</span></td><td><i class="fas fa-edit"></i> Regularizar</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="view-safety" class="view-section hidden">
+            <div class="grid-4">
+                <div class="card" style="border: 2px dashed var(--accent); text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <i class="fas fa-plus-circle" style="font-size: 2.5rem; color: var(--accent); margin-bottom: 10px;"></i>
+                    <h3 style="margin: 0; color: var(--accent);">Nuevo Checklist</h3>
+                </div>
+                <div class="card"><h3>Stock Botas</h3><div class="value">12</div><span class="sub-text">Pares disponibles</span></div>
+                <div class="card"><h3>Stock Cascos</h3><div class="value">45</div><span class="sub-text">Unidades disponibles</span></div>
+            </div>
+            <div class="card">
+                <h3>Auditoría de Campo en Tiempo Real</h3>
+                <table>
+                    <thead><tr><th>Hora</th><th>Ubicación</th><th>Hallazgo</th><th>Evidencia</th></tr></thead>
+                    <tbody>
+                        <tr><td>08:00 AM</td><td>Km 12</td><td>Zanja sin señalización</td><td><i class="fas fa-camera"></i> <a href="#" style="color: var(--accent);">IMG_2025.jpg</a></td></tr>
+                        <tr><td>09:30 AM</td><td>Km 10</td><td>Trabajo altura s/arnés</td><td><i class="fas fa-camera"></i> <a href="#" style="color: var(--accent);">IMG_2026.jpg</a></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="view-admin" class="view-section hidden">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3 style="margin: 0; color: var(--primary);">Control de Asistencia Biométrico</h3>
+                    <span class="badge bg-blue">Sincronizado: Hace 2 min</span>
+                </div>
+                <table>
+                    <thead><tr><th>ID</th><th>Nombre</th><th>Entrada</th><th>Salida</th><th>Horas Extras</th></tr></thead>
+                    <tbody>
+                        <tr><td>001</td><td>Juan Pérez</td><td>06:55 AM</td><td>05:00 PM</td><td><span style="color: var(--success); font-weight: bold;">2.0 (Dobles)</span></td></tr>
+                        <tr><td>002</td><td>Maria L.</td><td>07:00 AM</td><td>04:00 PM</td><td>0.0</td></tr>
+                        <tr><td>003</td><td>Pedro A.</td><td>06:50 AM</td><td>05:15 PM</td><td><span style="color: var(--success); font-weight: bold;">2.25 (Dobles)</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="view-about" class="view-section hidden">
+            <div style="text-align: center; margin-bottom: 40px;">
+                <h3 style="color: var(--primary); font-size: 1.5rem;">Equipo de Investigación</h3>
+                <p style="color: var(--text-light);">Desarrolladores de la solución ObraSegura</p>
+            </div>
+
+            <div class="team-grid">
+                <div class="team-card">
+                    <img src="https://ui-avatars.com/api/?name=Derecho&background=0f172a&color=fff&size=150" alt="Estudiante Derecho" class="team-photo">
+                    <span class="role-badge">Licenciatura en Derecho</span>
+                    <h4 class="student-name">Michell Nuñez</h4>
+                    <p class="student-desc">Encargado del Marco Legal, Compliance y auditoría de la Ley 618 y Código del Trabajo.</p>
+                </div>
+
+                <div class="team-card">
+                    <img src="https://ui-avatars.com/api/?name=Sistemas&background=3b82f6&color=fff&size=150" alt="Estudiante Sistemas" class="team-photo">
+                    <span class="role-badge">Ingeniería de Sistemas</span>
+                    <h4 class="student-name">Norma Espinoza</h4>
+                    <p class="student-desc">Desarrollador Full-Stack de la plataforma, arquitectura en la nube y seguridad de datos.</p>
+                </div>
+
+                <div class="team-card">
+                    <img src="https://ui-avatars.com/api/?name=Ingenieria&background=10b981&color=fff&size=150" alt="Estudiante Civil" class="team-photo">
+                    <span class="role-badge">Ing. Diseño y Construcción</span>
+                    <h4 class="student-name">Valentina Aguilar</h4>
+                    <p class="student-desc">Especialista en procesos constructivos, normativa NTON y gestión de seguridad industrial.</p>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 50px; opacity: 0.6;">
+                <p>Universidad Nacional Multidisciplinaria Ricardo Morales Avilés</p>
+                <p>&copy; 2025</p>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Lógica de navegación (SPA)
+        function showModule(id) {
+            // 1. Ocultar todas las secciones
+            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
+            
+            // 2. Mostrar la seleccionada
+            document.getElementById('view-' + id).classList.remove('hidden');
+            
+            // 3. Actualizar la clase 'active' en el menú
+            document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            // 4. Cambiar el título de la cabecera
+            const titles = {
+                'dashboard': 'Resumen Ejecutivo',
+                'legal': 'Gestión Jurídica y Contratos',
+                'safety': 'Seguridad Industrial (SSO)',
+                'admin': 'Administración de RRHH',
+                'about': 'Créditos del Proyecto'
+            };
+            document.getElementById('pageTitle').innerText = titles[id];
+        }
+
+        // Configuración de Gráficos (Chart.js)
+        const ctx1 = document.getElementById('mainChart').getContext('2d');
+        new Chart(ctx1, {
+            type: 'line',
+            data: {
+                labels: ['Lun', 'Mar', 'Mie', 'Jue', 'Vie'],
+                datasets: [{
+                    label: 'Checklists Completados',
+                    data: [12, 19, 15, 20, 18],
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: { responsive: true, plugins: { legend: { display: false } } }
+        });
+
+        const ctx2 = document.getElementById('docChart').getContext('2d');
+        new Chart(ctx2, {
+            type: 'doughnut',
+            data: {
+                labels: ['Verbal (Riesgo)', 'Firmados'],
+                datasets: [{
+                    data: [80, 20],
+                    backgroundColor: ['#ef4444', '#10b981'],
+                    borderWidth: 0
+                }]
+            },
+            options: { responsive: true, cutout: '70%' }
+        });
+    </script>
+</body>
+</html>

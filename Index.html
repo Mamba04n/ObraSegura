@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ObraSegura | Plataforma de Gestión Integral</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #0056b3; /* Azul Ingeniería */
+            --secondary: #ffc107; /* Amarillo Construcción */
+            --dark: #333;
+            --light: #f4f4f4;
+            --danger: #dc3545;
+            --success: #28a745;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: var(--light);
+        }
+
+        /* HEADER */
+        header {
+            background: #fff;
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .logo span {
+            color: var(--secondary);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 20px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary);
+        }
+
+        .btn-login {
+            background: var(--primary);
+            color: #fff;
+            padding: 8px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: #fff;
+            padding: 0 20px;
+            margin-top: 60px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin-bottom: 30px;
+        }
+
+        .btn-cta {
+            background: var(--secondary);
+            color: var(--dark);
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .btn-cta:hover {
+            transform: scale(1.05);
+        }
+
+        /* DIAGNOSIS SECTION (DATA) */
+        .diagnosis {
+            padding: 80px 10%;
+            background: #fff;
+            text-align: center;
+        }
+
+        .diagnosis h2 {
+            margin-bottom: 50px;
+            color: var(--primary);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .stat-card {
+            padding: 30px;
+            background: var(--light);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-bottom: 5px solid var(--danger);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--danger);
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        /* MODULES SECTION (SOLUTIONS) */
+        .modules {
+            padding: 80px 10%;
+            background: var(--light);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .modules-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .module-card {
+            background: #fff;
+            width: 300px;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            border-top: 5px solid var(--primary);
+        }
+
+        .module-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        /* DASHBOARD PREVIEW (PILOT) */
+        .dashboard-preview {
+            padding: 80px 5%;
+            background: #2c3e50;
+            color: #fff;
+        }
+
+        .dash-container {
+            background: #ecf0f1;
+            border-radius: 10px;
+            padding: 20px;
+            color: var(--dark);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .dash-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 10px;
+        }
+
+        .alert-box {
+            background: #ffeeba;
+            color: #856404;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .alert-box i {
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+
+        .kpi-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .kpi-box {
+            flex: 1;
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        /* FOOTER */
+        footer {
+            background: var(--dark);
+            color: #fff;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .footer-credits {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-top: 20px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">Obra<span>Segura</span></div>
+        <nav>
+            <ul>
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#diagnostico">Diagnóstico</a></li>
+                <li><a href="#solucion">Solución</a></li>
+                <li><a href="obrasegura.html">Demo Piloto</a></li>
+            </ul>
+        </nav>
+        <a href="#piloto" class="btn-login">Acceso Clientes</a>
+    </header>
+
+    <section class="hero" id="inicio">
+        <h1>Transformando la Construcción en Tola-Rivas</h1>
+        <p>Plataforma integral para el cumplimiento normativo (Derecho), eficiencia administrativa (Sistemas) y seguridad laboral (Ing. Civil).</p>
+        <button class="btn-cta" onclick="document.getElementById('piloto').scrollIntoView();">Ver Prototipo Funcional</button>
+    </section>
+
+    <section class="diagnosis" id="diagnostico">
+        <h2>¿Por qué nace ObraSegura?</h2>
+        <p style="margin-bottom: 30px;">Resultados de nuestro diagnóstico en el Proyecto Costanera (MECO):</p>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-number">80%</span>
+                <h3>Informalidad</h3>
+                <p>De los trabajadores opera bajo contratos verbales, generando riesgo legal crítico.</p>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">40%</span>
+                <h3>Riesgo Físico</h3>
+                <p>Del personal observado utiliza calzado inadecuado (tenis) en zonas de riesgo.</p>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">3 Días</span>
+                <h3>Ineficiencia</h3>
+                <p>Tiempo promedio para localizar un expediente físico ante auditorías del MITRAB.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="modules" id="solucion">
+        <div class="section-title">
+            <h2>Nuestra Solución Multidisciplinaria</h2>
+            <p>Integramos tres áreas clave en una sola plataforma en la nube.</p>
+        </div>
+
+        <div class="modules-container">
+            <div class="module-card">
+                <i class="fas fa-gavel module-icon"></i>
+                <h3>Gestión Legal (Compliance)</h3>
+                <p>Generación automática de contratos, repositorio digital y alertas de vencimiento de Licencias MITRAB.</p>
+            </div>
+
+            <div class="module-card">
+                <i class="fas fa-hard-hat module-icon"></i>
+                <h3>Seguridad (SSO)</h3>
+                <p>Listas de chequeo digitales (Checklists) para EPP, excavaciones y trabajos en altura según Ley 618.</p>
+            </div>
+
+            <div class="module-card">
+                <i class="fas fa-mobile-alt module-icon"></i>
+                <h3>Eficiencia Administrativa</h3>
+                <p>Control de asistencia biométrico/móvil, generación de vouchers de pago digitales y reportes en tiempo real.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="dashboard-preview" id="piloto">
+        <div class="section-title" style="color: #fff;">
+            <h2>Prototipo: Panel de Control Gerencial</h2>
+            <p>Vista simulada del Ingeniero Residente en Tola</p>
+        </div>
+
+        <div class="dash-container">
+            <div class="dash-header">
+                <div>
+                    <h3>Proyecto: Carretera Costanera - Tramo Tola</h3>
+                    <small>Estado: <span style="color: green; font-weight: bold;">En Ejecución</span> | Última actualización: Hace 5 min</small>
+                </div>
+                <div>
+                    <button class="btn-login" style="background: #333;">Exportar Reporte PDF</button>
+                </div>
+            </div>
+
+            <div class="alert-box">
+                <i class="fas fa-exclamation-triangle"></i>
+                <div>
+                    <strong>¡Alerta Crítica Legal!</strong>
+                    <br>La Licencia de Apertura MITRAB vence en 48 horas. <a href="#">Renovar aquí</a>.
+                </div>
+            </div>
+
+            <div class="kpi-row">
+                <div class="kpi-box">
+                    <h4>Personal en Campo</h4>
+                    <span style="font-size: 2rem; font-weight: bold; color: var(--primary);">45/50</span>
+                    <p>Asistencia hoy</p>
+                </div>
+                <div class="kpi-box">
+                    <h4>Checklist SSO</h4>
+                    <span style="font-size: 2rem; font-weight: bold; color: var(--success);">100%</span>
+                    <p>Completados (Excavaciones)</p>
+                </div>
+                <div class="kpi-box">
+                    <h4>Contratos Firmados</h4>
+                    <span style="font-size: 2rem; font-weight: bold; color: var(--danger);">20%</span>
+                    <p>¡Regularizar Urgente!</p>
+                </div>
+                <div class="kpi-box">
+                    <h4>Incidentes</h4>
+                    <span style="font-size: 2rem; font-weight: bold; color: orange;">2</span>
+                    <p>Reportados esta semana</p>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px; background: #fff; padding: 20px; border-radius: 5px;">
+                <h4>Registro de Actividad Reciente (Trazabilidad)</h4>
+                <table style="width: 100%; text-align: left; margin-top: 10px; border-collapse: collapse;">
+                    <tr style="background: #f8f9fa;">
+                        <th style="padding: 10px;">Hora</th>
+                        <th>Usuario</th>
+                        <th>Acción</th>
+                        <th>Estado</th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;">08:15 AM</td>
+                        <td>Capataz Juan Pérez</td>
+                        <td>Checklist de Seguridad (Excavación km 12)</td>
+                        <td style="color: green;">Aprobado</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;">08:30 AM</td>
+                        <td>Admin. María L.</td>
+                        <td>Carga de Contratos Nuevos (3)</td>
+                        <td style="color: blue;">Sincronizado</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;">09:10 AM</td>
+                        <td>Sistema</td>
+                        <td>Alerta: Falta de EPP (Botas) - Cuadrilla 4</td>
+                        <td style="color: red;">Pendiente</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="logo" style="color: #fff;">Obra<span>Segura</span></div>
+        <p>Solución tecnológica para el cumplimiento normativo y seguridad laboral en construcción.</p>
+        
+        <div class="footer-credits">
+            <p>Tesis Multidisciplinaria | Universidad Nacional Multidisciplinaria Ricardo Morales Avilés</p>
+            <p>Desarrollado por: Estudiante Derecho | Estudiante Sistemas | Estudiante Ing. Civil</p>
+            <p>&copy; 2025 ObraSegura - Tola, Rivas.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
