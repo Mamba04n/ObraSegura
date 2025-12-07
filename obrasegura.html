@@ -113,8 +113,47 @@
         .student-desc { font-size: 0.9rem; color: var(--text-light); line-height: 1.6; }
 
     </style>
+    <style>
+        /* RESPONSIVE: Sidebar & Layout */
+        .topbar {
+            display: none;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background: var(--white);
+            border-bottom: 1px solid #e2e8f0;
+            padding: 12px 16px;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .topbar .brand-inline { display: flex; align-items: center; gap: 10px; font-weight: 800; color: var(--primary); }
+        .hamburger { background: transparent; border: none; font-size: 1.4rem; color: var(--accent); cursor: pointer; }
+
+        @media (max-width: 1024px) {
+            .main { padding: 24px; }
+        }
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { position: fixed; left: 0; top: 0; height: 100vh; transform: translateX(-100%); transition: transform 0.3s ease; }
+            .sidebar.show { transform: translateX(0); }
+            .topbar { display: flex; }
+            .main { padding: 20px; }
+        }
+        @media (max-width: 480px) {
+            .header { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .value { font-size: 1.8rem; }
+            table th, table td { padding: 10px; }
+        }
+    </style>
 </head>
 <body>
+
+    <div class="topbar">
+        <div class="brand-inline"><i class="fas fa-layer-group" style="color: var(--accent);"></i> ObraSegura</div>
+        <button class="hamburger" aria-label="Abrir menú" onclick="document.querySelector('.sidebar').classList.toggle('show')">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
 
     <aside class="sidebar">
         <div class="brand">
